@@ -289,16 +289,19 @@
     padding: 0;
   }
   .marquee:hover .marquee-track,
+  [data-ticker][data-paused] .marquee-track,
   .marquee:focus-within .marquee-track {
     animation-play-state: paused;
   }
   @media (prefers-reduced-motion: reduce) {
     .marquee-track {
       animation: none;
-      width: auto;
+      width: 100%;
     }
     .marquee-list {
+      flex-shrink: 1;
       flex-wrap: wrap;
+      row-gap: 0.25rem;
     }
     .marquee-copy {
       display: none;
