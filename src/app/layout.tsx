@@ -4,6 +4,8 @@ import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { siteUrl } from "@/lib/seo";
+import { validateAllContent } from "@/lib/content";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -20,6 +22,7 @@ const hanken = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: { default: "Revora Solutions", template: "%s | Revora Solutions" },
   description: "Connecting Talent with Opportunity",
 };
@@ -29,6 +32,8 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  // Any invalid file in content/ fails the build here, whichever route is rendered.
+  validateAllContent();
   return (
     <html
       lang="en-IN"
