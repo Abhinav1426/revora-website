@@ -14,9 +14,13 @@ Built with Next.js 16 (App Router), React 19, Tailwind CSS v4 and shadcn/ui. Eve
 | ![What we do](docs/screenshots/home-services-desktop.jpg) | ![How a hire works](docs/screenshots/home-process-desktop.jpg) |
 | ![Why companies stay with us](docs/screenshots/home-principles-desktop.jpg) | ![Services mega menu](docs/screenshots/mega-menu-desktop.jpg) |
 
-| Mobile home | Mobile menu | Footer |
-|---|---|---|
-| <img src="docs/screenshots/home-mobile.jpg" width="260" alt="Home page on mobile"> | <img src="docs/screenshots/menu-mobile.jpg" width="260" alt="Mobile navigation"> | <img src="docs/screenshots/footer-desktop.jpg" width="420" alt="Footer"> |
+| Services: Talent & Staffing | Service page: Cloud Services |
+|---|---|
+| ![Talent & Staffing pillar page](docs/screenshots/services-pillar-desktop.jpg) | ![Cloud Services page](docs/screenshots/service-detail-desktop.jpg) |
+
+| Mobile home | Mobile menu | Mobile service page | Footer |
+|---|---|---|---|
+| <img src="docs/screenshots/home-mobile.jpg" width="220" alt="Home page on mobile"> | <img src="docs/screenshots/menu-mobile.jpg" width="220" alt="Mobile navigation"> | <img src="docs/screenshots/service-mobile.jpg" width="220" alt="IT Recruitment page on mobile"> | <img src="docs/screenshots/footer-desktop.jpg" width="380" alt="Footer"> |
 
 ## Tech stack
 
@@ -107,8 +111,8 @@ Home · About · Services overview · 3 service areas (Talent & Staffing, Techno
 | 1. Design system | Done |
 | 2. Site shell and content layer | Done |
 | 3. Home page | Done |
-| 4. Services pages | In progress |
-| 5. About, Careers, Insights, Contact, forms, legal | To do |
+| 4. Services pages | Done |
+| 5. About, Careers, Insights, Contact, forms, legal | Next |
 | 6. Testing, performance and accessibility hardening | To do |
 | 7. Deploy to Vercel | To do |
 
