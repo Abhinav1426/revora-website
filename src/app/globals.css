@@ -323,3 +323,16 @@ mark[data-placeholder] {
   outline-offset: 2px;
   border-radius: 2px;
 }
+
+/* Reveal failsafe: if JavaScript hasn't hydrated within 1.5s (blocked, slow or failed),
+   show every reveal/draw element anyway so content is never stuck invisible. */
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html:not([data-hydrated]) [data-reveal],
+html:not([data-hydrated]) [data-draw] {
+  animation: reveal-failsafe 0.01s linear 1.5s forwards;
+}

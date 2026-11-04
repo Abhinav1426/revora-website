@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { siteUrl } from "@/lib/seo";
 import { validateAllContent } from "@/lib/content";
+import { HydrationMarker } from "@/components/motion/HydrationMarker";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}[data-draw]{opacity:1!important;stroke-dasharray:none!important;stroke-dashoffset:0!important}`}</style>
         </noscript>
+        <HydrationMarker />
         {children}
         <Analytics />
         <SpeedInsights />
