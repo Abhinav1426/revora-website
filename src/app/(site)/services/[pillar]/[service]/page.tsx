@@ -1,13 +1,19 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
+import { site } from "@/config/site";
 import { CtaBand } from "@/components/layout/CtaBand";
-import { Container } from "@/components/layout/Container";
-import { PageHero } from "@/components/sections/PageHero";
-import { Text } from "@/components/Text";
-import { Button, ButtonArrow } from "@/components/ui/button";
-import { getPage, getPillar, getService, getServices } from "@/lib/content";
-import { buildMetadata } from "@/lib/seo";
+import { CandidateNote } from "@/components/sections/CandidateNote";
+import { DarkGroupedList } from "@/components/sections/DarkGroupedList";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { GlanceStrip } from "@/components/sections/GlanceStrip";
+import { IncludesList } from "@/components/sections/IncludesList";
+import { RelatedServices } from "@/components/sections/RelatedServices";
+import { ServiceHero } from "@/components/sections/ServiceHero";
+import { StepsList } from "@/components/sections/StepsList";
+import { WhyList } from "@/components/sections/WhyList";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getPillar, getService, getServices } from "@/lib/content";
+import { stripPlaceholders } from "@/lib/placeholders";
+import { absoluteUrl, buildMetadata, siteUrl } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -20,8 +26,12 @@ type Props = { params: Promise<{ pillar: string; service: string }> };
 export async function generateMetadata({ params }: Props) {
   const { pillar, service: slug } = await params;
   const service = getService(pillar, slug);
-  if (!service) return {};
-  return buildMetadata({ ...service.seo, path: "/services/" + pillar + "/" + slug });
+  const pillarData = getPillar(pillar);
+  if (!service || !pillarData) return {};
+  return buildMetadata({
+    ...service.seo,
+    path: "/services/" + pillar + "/" + slug,
+  });
 }
 
 export default async function ServicePage({ params }: Props) {
@@ -32,82 +42,55 @@ export default async function ServicePage({ params }: Props) {
 
   const all = getServices();
   const related = service.related.flatMap((r) => all.filter((s) => s.slug === r));
-  const candidateNote = getPage("shared").candidateNote;
+  const isStaffing = pillar.slug === "staffing";
+
+  // Keep the white/paper rhythm intact whether or not the navy list section is present.
+  const hasList = Boolean(service.list);
+  const [stepsBg, whyBg, faqBg, relatedBg] = hasList
+    ? (["white", "paper", "white", "paper"] as const)
+    : (["paper", "white", "paper", "white"] as const);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: stripPlaceholders(service.title),
+    serviceType: stripPlaceholders(service.title),
+    description: stripPlaceholders(service.summary),
+    url: absoluteUrl(`/services/${pillar.slug}/${service.slug}`),
+    provider: { "@type": "Organization", name: site.name, url: siteUrl },
+    areaServed: "IN",
+  };
 
   return (
     <>
-      <Breadcrumbs
-        items={[
+      <ServiceHero
+        service={service}
+        photo={pillar.hero.image}
+        crumbs={[
           { label: "Services", href: "/services" },
           { label: pillar.title, href: "/services/" + pillar.slug },
           { label: service.title },
         ]}
       />
-      <PageHero
-        eyebrow={service.hero.eyebrow}
-        title={service.hero.headline}
-        intro={service.hero.intro}
-        actions={
-          <Button asChild size="lg">
-            <Link href={"/contact?enquiry=" + service.enquiry}>
-              <Text>{service.hero.cta}</Text>
-              <ButtonArrow />
-            </Link>
-          </Button>
-        }
+      <GlanceStrip items={service.glance} />
+      <IncludesList
+        title={service.includes.title}
+        intro={service.includes.intro}
+        items={service.includes.items}
       />
-      <Container className="pb-20">
-        <section aria-labelledby="includes" className="border-t border-line pt-10">
-          <h2 id="includes" className="text-h2">
-            <Text>{service.includes.title}</Text>
-          </h2>
-          <p className="mt-4 text-fg-muted">
-            <Text>{service.includes.intro}</Text>
-          </p>
-          <ul className="mt-8 grid gap-x-10 gap-y-6 md:grid-cols-2">
-            {service.includes.items.map((item) => (
-              <li key={item.title}>
-                <h3 className="text-h3">
-                  <Text>{item.title}</Text>
-                </h3>
-                <p className="mt-2 text-fg-muted">
-                  <Text>{item.text}</Text>
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {related.length > 0 ? (
-          <section aria-labelledby="related" className="mt-16 border-t border-line pt-10">
-            <h2 id="related" className="text-h3">
-              Related services
-            </h2>
-            <ul className="mt-4 flex flex-wrap gap-x-8">
-              {related.map((s) => (
-                <li key={s.slug}>
-                  <Button asChild variant="link-arrow">
-                    <Link href={"/services/" + s.pillar + "/" + s.slug}>
-                      <Text>{s.title}</Text>
-                      <ButtonArrow />
-                    </Link>
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        {pillar.slug === "staffing" ? (
-          <p className="mt-10 text-fg-muted">
-            <Text>{candidateNote.text}</Text>{" "}
-            <Link href={candidateNote.link.href}>
-              <Text>{candidateNote.link.label}</Text>
-            </Link>
-          </p>
-        ) : null}
-      </Container>
+      {service.list ? <DarkGroupedList title={service.list.title} groups={service.list.groups} /> : null}
+      <StepsList title="How it works" steps={service.steps} bg={stepsBg} />
+      <WhyList
+        title="Why Revora"
+        reasons={service.why.reasons}
+        pullLine={service.why.pullLine}
+        bg={whyBg}
+      />
+      <FaqSection faqs={service.faqs} bg={faqBg} />
+      <RelatedServices services={related} bg={relatedBg} />
+      {isStaffing ? <CandidateNote bg={relatedBg === "paper" ? "white" : "paper"} /> : null}
       <CtaBand enquiry={service.enquiry} />
+      <JsonLd data={jsonLd} />
     </>
   );
 }
