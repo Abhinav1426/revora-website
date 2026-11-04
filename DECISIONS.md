@@ -52,3 +52,16 @@
 - Phase 3: Header needed no change: `Header.tsx` is already transparent-until-scrolled on `/` only. The hero is white and the header stays in flow, so no negative margin is used.
 - Phase 3: hero h1 is `display-xl` as specced; at 1280 it sets on three lines in the L7 column. Mobile hero photo uses `object-position: 50% 20%` so the 16:10 crop keeps the face.
 - Phase 3: Lighthouse mobile (simulated 4G) Performance is about 82, LCP about 4.7s with 0 CLS. The hero image itself loads in well under 200ms; the likely driver is about 300KB of preloaded Fraunces (normal and italic variable) in the root layout. Revisit in the performance phase (e.g. drop the italic preload, trim axes). The only best-practices miss is the Vercel analytics scripts 404ing locally.
+
+## Phase 4
+
+- Phase 4: Breadcrumbs gained a `bare` prop (no Container) and now uses `text-fg-muted`, so it reads correctly inside the navy pillar hero (slate on navy, ink-muted on white).
+- Phase 4: tiny UI labels not in content: "How it works", "Why Revora", "Questions we hear often", "Ask us something else", "Related services", "View service", "Read the FAQs", "See the services", "Services in {pillar}", "Tools and platforms", "Billing". The pillar "How we work" title is also a UI label.
+- Phase 4: service pages with `heroVisual: photo` use the matching pillar photo (no per-service photos exist, none downloaded). Staffing services therefore share one photo; the three staffing photo pages differ in copy and layout. The pillar hero applies a duotone via `mix-blend-luminosity` on a navy ground plus a navy gradient, so no new image files.
+- Phase 4: the navy "Roles we hire / Capabilities" section is optional in the content (3 services have no `list`). When absent, the steps/why/faq/related backgrounds shift (paper/white/paper/white) so white and paper still alternate and no two sections of the same colour touch. The staffing candidate note takes the opposite background of Related services.
+- Phase 4: pillar card "3 bullet highlights" are the first three `includes.items` titles of each service (no separate content field exists). Even-numbered cards drop 40px on desktop for an asymmetric grid; with an odd count the last card sits alone on the left.
+- Phase 4: hub pillar summary uses `pillar.hero.intro` (no dedicated summary field in _pillars.md).
+- Phase 4: FAQ is L5 heading and R7 accordion on all pages (spec only says accordion). It emits FAQPage JSON-LD with placeholders stripped; Service JSON-LD carries serviceType, provider Organization and areaServed "IN". Pillar and hub pages emit FAQPage and BreadcrumbList only.
+- Phase 4: the tools panel on service heroes uses the system monospace stack (no mono font is loaded) on a navy-to-blue card, with a gold slash marker per item.
+- Phase 4: hero sections for hub, pillar and service are custom (not PageHero) and are not wrapped in Reveal; every section below the fold uses Reveal or Stagger.
+- Phase 4: the only console errors in production are the two Vercel analytics script 404s outside Vercel (already known from Phase 3).
