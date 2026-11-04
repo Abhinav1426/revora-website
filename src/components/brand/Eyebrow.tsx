@@ -15,7 +15,7 @@ export function Eyebrow({ children, dot = false, as: Tag = "p", className }: Eye
   return (
     <Tag
       className={cn(
-        "inline-flex items-center gap-2.5 text-xs font-semibold tracking-[0.14em] text-accent-text uppercase sm:text-[0.8125rem]",
+        "inline-flex items-center gap-2.5 font-sans text-xs font-semibold tracking-[0.14em] text-accent-text uppercase sm:text-[0.8125rem]",
         className
       )}
     >
