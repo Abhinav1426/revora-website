@@ -1,11 +1,9 @@
-import Link from "next/link";
-import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CtaBand } from "@/components/layout/CtaBand";
-import { Container } from "@/components/layout/Container";
-import { PageHero } from "@/components/sections/PageHero";
-import { Text } from "@/components/Text";
-import { Button, ButtonArrow } from "@/components/ui/button";
-import { getPillars, getServicesHub } from "@/lib/content";
+import { EngagementModels } from "@/components/sections/EngagementModels";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { HubPillarSection } from "@/components/sections/HubPillarSection";
+import { ServicesHubHero } from "@/components/sections/ServicesHubHero";
+import { getPillars, getServicesByPillar, getServicesHub } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 
 const hub = getServicesHub();
@@ -13,31 +11,21 @@ const hub = getServicesHub();
 export const metadata = buildMetadata({ ...hub.seo, path: "/services" });
 
 export default function ServicesPage() {
-  const { hero } = hub;
+  const pillars = getPillars();
   return (
     <>
-      <Breadcrumbs items={[{ label: "Services" }]} />
-      <PageHero eyebrow={hero.eyebrow} title={hero.headline} intro={hero.intro} />
-      <Container className="pb-20">
-        <ul className="grid gap-10 border-t border-line pt-10 md:grid-cols-3">
-          {getPillars().map((pillar) => (
-            <li key={pillar.slug}>
-              <h2 className="text-h3">
-                <Text>{pillar.title}</Text>
-              </h2>
-              <p className="mt-3 text-fg-muted">
-                <Text>{pillar.hero.intro}</Text>
-              </p>
-              <Button asChild variant="link-arrow" className="mt-3">
-                <Link href={`/services/${pillar.slug}`}>
-                  Explore {pillar.title}
-                  <ButtonArrow />
-                </Link>
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </Container>
+      <ServicesHubHero hero={hub.hero} pillars={pillars} />
+      {pillars.map((pillar, i) => (
+        <HubPillarSection
+          key={pillar.slug}
+          pillar={pillar}
+          services={getServicesByPillar(pillar.slug)}
+          index={i}
+          bg={i % 2 === 0 ? "white" : "paper"}
+        />
+      ))}
+      <EngagementModels data={hub.engagementModels} />
+      <FaqSection faqs={hub.faqs} bg="white" />
       <CtaBand enquiry="general" />
     </>
   );
