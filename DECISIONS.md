@@ -38,3 +38,17 @@
 - Phase 2: `opengraph-image.tsx` fetches Fraunces (400, only the tagline glyphs) from Google Fonts at build and falls back to the default serif if offline; its navy and gold hex values are literals because next/og cannot read CSS variables.
 - Phase 2: `html { scroll-padding-top: 5rem }` so the sticky header never hides focused or anchored content; `<main id="main" tabIndex={-1}>` so the skip link moves focus reliably.
 - Phase 2: PageHero is a minimal inner-page hero (eyebrow, h1, intro, actions) used by every sparse page; Phases 3 to 5 replace it per page.
+
+## Phase 3
+
+- Phase 3: user-requested addition, not in spec/04: `OpenRolesTeaser` ("careers inside" the home page) sits between Insights and Two Doors on paper. Eyebrow "Careers", h2 "Open roles", "See all open roles" link are tiny UI labels; every job row (title, location, type, experience) comes from job frontmatter via `getJobs({ activeOnly: true })`, max four.
+- Phase 3: background rhythm is white hero, navy ticker, white pillars, paper timeline, white split, navy principles, white beyond hiring, paper industries, white insights, paper open roles, split doors. The left half of Two Doors is navy and the footer below it is navy too (spec-mandated layout); its navy-to-blue gradient ends in blue so the two do not read as one block.
+- Phase 3: pillar sub-service links are resolved from `getServices()` by title (exact or suffix match, so "Sourcing & Screening" finds "Candidate Sourcing & Screening") and the build throws if one does not match. They are separated by spacing and underlines, not gold dots, because dots wrap to the start of a line and look broken in a 540px column.
+- Phase 3: pillar hover photos are decorative (`alt=""`, `aria-hidden`), `loading="lazy"` inside a `display:none` (below lg) wrapper, so they are not fetched until the row is shown. They fade in on hover and focus-within, pure CSS, no client JS.
+- Phase 3: founder attribution uses the reversed Mark in a circle (no photo exists, `founder.jpg` is not used). Name stays the `[[Founder name]]` placeholder.
+- Phase 3: Insights teaser needs no cover images (they do not exist yet). With 3 posts it is one large (L6) and two stacked (R6); with 2 posts they sit side by side 7/5; with 1 it is a single large item.
+- Phase 3: ProofStrip is built and gated by `site.flags.showStats`; it counts up only plain numeric values, and `[[placeholder]]` values render as copy.
+- Phase 3: role ticker got a pause button (WCAG 2.2.2, closes the Phase 1 note). It toggles `data-paused` on the band and is hidden under reduced motion. Also fixed the reduced-motion marquee CSS (the list did not wrap because of `flex-shrink: 0`), so the static wrapped list now works.
+- Phase 3: Header needed no change: `Header.tsx` is already transparent-until-scrolled on `/` only. The hero is white and the header stays in flow, so no negative margin is used.
+- Phase 3: hero h1 is `display-xl` as specced; at 1280 it sets on three lines in the L7 column. Mobile hero photo uses `object-position: 50% 20%` so the 16:10 crop keeps the face.
+- Phase 3: Lighthouse mobile (simulated 4G) Performance is about 82, LCP about 4.7s with 0 CLS. The hero image itself loads in well under 200ms; the likely driver is about 300KB of preloaded Fraunces (normal and italic variable) in the root layout. Revisit in the performance phase (e.g. drop the italic preload, trim axes). The only best-practices miss is the Vercel analytics scripts 404ing locally.
