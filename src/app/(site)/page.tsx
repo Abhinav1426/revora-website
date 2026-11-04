@@ -1,9 +1,16 @@
-import Link from "next/link";
-import { PageHero } from "@/components/sections/PageHero";
-import { CtaBand } from "@/components/layout/CtaBand";
+import { BeyondHiring } from "@/components/sections/BeyondHiring";
+import { HomeHero } from "@/components/sections/HomeHero";
+import { IndustryChips } from "@/components/sections/IndustryChips";
+import { InsightsTeaser } from "@/components/sections/InsightsTeaser";
+import { ItNonItSplit } from "@/components/sections/ItNonItSplit";
+import { OpenRolesTeaser } from "@/components/sections/OpenRolesTeaser";
+import { PillarRows } from "@/components/sections/PillarRows";
+import { PrincipleQuote } from "@/components/sections/PrincipleQuote";
+import { ProofStrip } from "@/components/sections/ProofStrip";
+import { RoleTicker } from "@/components/sections/RoleTicker";
+import { Timeline } from "@/components/sections/Timeline";
+import { TwoDoors } from "@/components/sections/TwoDoors";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Text } from "@/components/Text";
-import { Button, ButtonArrow } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { getPage } from "@/lib/content";
 import { absoluteUrl, buildMetadata } from "@/lib/seo";
@@ -18,11 +25,7 @@ export const metadata = buildMetadata({
   absoluteTitle: true,
 });
 
-/** Remove the {swoosh}...{/swoosh} emphasis markers. The designed hero (Phase 3) renders them as a Swoosh. */
-const plainHeadline = (s: string) => s.replace(/\{\/?swoosh\}/g, "");
-
 export default function HomePage() {
-  const { hero } = home;
   const sameAs = Object.values(site.socials).filter(Boolean).map(stripPlaceholders);
   const jsonLd = [
     {
@@ -50,28 +53,18 @@ export default function HomePage() {
   ];
   return (
     <>
-      <PageHero
-        eyebrow={hero.eyebrow}
-        title={plainHeadline(hero.headline)}
-        intro={hero.intro}
-        actions={
-          <>
-            <Button asChild size="lg">
-              <Link href={hero.primaryCta.href}>
-                <Text>{hero.primaryCta.label}</Text>
-                <ButtonArrow />
-              </Link>
-            </Button>
-            <Button asChild variant="link-arrow">
-              <Link href={hero.secondaryCta.href}>
-                <Text>{hero.secondaryCta.label}</Text>
-                <ButtonArrow />
-              </Link>
-            </Button>
-          </>
-        }
-      />
-      <CtaBand enquiry="hire" />
+      <HomeHero />
+      <ProofStrip />
+      <RoleTicker />
+      <PillarRows />
+      <Timeline />
+      <ItNonItSplit />
+      <PrincipleQuote />
+      <BeyondHiring />
+      <IndustryChips />
+      <InsightsTeaser />
+      <OpenRolesTeaser />
+      <TwoDoors />
       <JsonLd data={jsonLd} />
     </>
   );
